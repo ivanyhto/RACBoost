@@ -18,15 +18,11 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras import Input, regularizers
 from tensorflow.keras.losses import MeanSquaredError
-from tensorflow import convert_to_tensor, GradientTape, function
+from tensorflow import convert_to_tensor, GradientTape
 
 from sklearn.tree._tree import TREE_LEAF
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.base import BaseEstimator, ClassifierMixin
-
-"""
-Regularised Augmented Conditional Boosting Model
-"""
 
 
 class RACBoost(BaseEstimator, ClassifierMixin):
@@ -408,15 +404,12 @@ class RACBoost(BaseEstimator, ClassifierMixin):
             choice_col=self.choice_col)
         self.init_ = self.loss_.init_estimator()
 
-        # Check Initialize model
-        # self._check_Init()
-
         self.loss_.init_estimator_warnings('ignore')
 
         init_set = y.merge(X)
 
         max_likelihood = -np.inf
-        for col in ['OD_CR_LP']:  # self.features_list_:
+        for col in self.features_list_:
             spec = OrderedDict()
             spec[col] = 'all_same'
             zeros = np.zeros(len(spec))
@@ -546,20 +539,9 @@ class RACBoost(BaseEstimator, ClassifierMixin):
         # Initialise an Loss Function
         loss_fn = MeanSquaredError(reduction="auto", name="mean_squared_error")
 
-        # @function
-        # def train_step(x_batch_train, y_batch_train):
-        #     with GradientTape() as tape:
-        #         y_pred = model(x_batch_train, training=True)
-        #         # y_true = convert_to_tensor(y_batch_train.values.reshape(y_batch_train.size,1), dtype='float32')
-        #         loss_value = loss_fn(y_batch_train, y_pred)
-        #     grads = tape.gradient(loss_value, model.trainable_weights)
-        #     optimizer.apply_gradients(zip(grads, model.trainable_weights))
-        #     return None
-
         epochs = 10
         # Fitting the model
         for epoch in range(epochs):
-            # print("\nStart of epoch %d" % (epoch,))
 
             # Iterate over the batches of the dataset.
             for step, (x_batch_train, y_batch_train) in enumerate(train_dataset):
@@ -663,12 +645,6 @@ class RACBoost(BaseEstimator, ClassifierMixin):
         # Init Regression Tree
         tree = DecisionTreeRegressor(max_depth=self.max_depth,
                                      splitter='best',
-                                     # min_sample_split = None
-                                     # min_sample_leaf = None
-                                     # min_weight_fraction = None
-                                     # min_impurity_decrease = None
-                                     # min_impurity_split = None
-                                     # max_leaf_nodes = None
                                      random_state=self.random_state)
 
         # Fit Model
@@ -1051,7 +1027,6 @@ class Reg_ConditionalLogit_Loss():
             the dataframe should be in long format for the discrete choice model
         """
         # Define the boundary values which are not to be exceeded during
-        # np.exp()
         max_exp_val = 700
         min_exp_val = -700
         # The following guards against numeric under / over flow in the utility
@@ -1109,7 +1084,6 @@ class VerboseReporter():
 
     def update(self, iteration, estimator):
 
-        # iteration = str(iteration) + ' '*(4-len(str(iteration)))
         train_score = round(estimator.train_score_[iteration], 2)
 
         elapsed = time.time() - self.start_time
