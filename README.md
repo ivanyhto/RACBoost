@@ -8,7 +8,7 @@ Modern machine learning techniques such as gradient boosting and neural networks
 Keywords : Discrete Choice, Gradient Boosting, Conditional Logit, Transfer Learning
 
 ## Training Process
-![alt text](https://github.com/ivanyhto/RACBoost/blob/master/Figures - Training.png?raw=true)
+![alt text](https://github.com/ivanyhto/RACBoost/blob/master/Training.png?raw=true)
 
 ## Prediction Process
-![alt text](https://github.com/ivanyhto/RACBoost/blob/master/Figures - Prediction.png?raw=true)
+![alt text](https://github.com/ivanyhto/RACBoost/blob/master/Prediction.png?raw=true)
